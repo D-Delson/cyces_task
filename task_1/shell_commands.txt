@@ -1,0 +1,24 @@
+from product.models import Product  
+
+1. to insert a product
+
+a = Product(name='Pen', prize=10.00)
+a.save()
+
+a1 = Product(name='Pencil', prize=5.00)
+a1.save()
+
+Product.objects.create(name='Erasar', prize=2.00)
+
+2. view the queryset
+
+Product.objects.all()
+
+3.Update the queryset
+
+Product.objects.filter(name='Pen').update(name='Candy')
+
+4. Delete the object
+
+Product.objects.filter(name='Candy').delete()
+

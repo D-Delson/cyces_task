@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Subcategory</h1>
+<table class="table table-hove table-bordered">
+    <thead>
+        <tr>
+            <td>Subcategory name</td>
+            <td>Edit</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in s_list %}
+        <tr>
+            <td>{{s.name}}</td>
+            <td>
+                <div class="btn-group">
+                    <a href="{% url 'subcategory_update' s.id %}" class="btn btn-secondary">Update</a>
+                    <a href="{% url 'subcategory_delete' s.id %}" class="btn btn-danger">Delete</a>
+                </div>
+            </td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="text-center">
+    <a href="{% url 'subcategory_add' %}" class="btn btn-primary">Add Subcategory</a>
+    <a href="{% url 'category_add' %}" class="btn btn-secondary">Back to Category Add</a>
+</div>
+{% endblock %}

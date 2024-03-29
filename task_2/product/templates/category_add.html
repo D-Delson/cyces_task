@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="text-center">
+        {{ form }}
+
+        <a href="{% url 'category_list' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{% url 'subcategory_add' %}" class="btn btn-secondary">Add Subcategory</a>
+    </div>
+    
+</form>
+{% endblock %}

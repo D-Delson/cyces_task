@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+
+    <div class="container mt-3 text-center">
+        <h3>Products</h3>
+    </div>
+    
+    <table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Product name</td>
+            <td>Price</td>
+            <td>Category</td>
+            <td>SubCategory</td>
+            <td>Edit</td>
+        </tr>
+    </thead> 
+    <tbody>
+        {% for f in form %}
+        <tr>
+            <td>{{ f.id }}</td>
+            <td>{{ f.name }}</td>
+            <td>{{ f.price }}</td>
+            <td>{{ f.category }}</td>
+            <td>{{ f.subcategory }}</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-outline-danger" href="{% url 'product_update' f.id %}" >Update</a>
+                    <a class="btn btn-outline-danger" href="{% url 'product_delete' f.id %}">Delete</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>   
+    </table>
+    <div class="text-center">
+        <a class="btn btn-primary mt-5" href="{% url 'product_add' %}" role="button">Add Products</a>
+        <a class="btn btn-secondary mt-5" href="{% url 'category_add' %}" role="button">Add Category</a>
+    </div>
+    {% endblock %}
+
+
+
+
+
+ 

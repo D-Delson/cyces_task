@@ -10,13 +10,13 @@
         </tr>
     </thead>
     <tbody>
-        {% for s in s_list %}
+        {% for object in object_list %}
         <tr>
-            <td>{{s.name}}</td>
+            <td>{{object.name}}</td>
             <td>
                 <div class="btn-group">
-                    <a href="{% url 'subcategory_update' s.id %}" class="btn btn-secondary">Update</a>
-                    <a href="{% url 'subcategory_delete' s.id %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'subcategory_update' object.id %}" class="btn btn-secondary">Update</a>
+                    <a href="{% url 'subcategory_delete' object.id %}" class="btn btn-danger">Delete</a>
                 </div>
             </td>
             

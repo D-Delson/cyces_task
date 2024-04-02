@@ -2,14 +2,16 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from .models import Product,Category, SubCategory 
+from .config import PAGINATION_LIMIT
 
 class ProductListView(ListView):
     model = Product
     template_name = 'product.html'
+    paginate_by = PAGINATION_LIMIT
 
 class ProductCreateView(CreateView):
     model = Product
-    fields = ['name', 'price', 'category', 'subcategory']
+    fields = [ 'name', 'price', 'category', 'subcategory']
     template_name = 'product_add.html'
     success_url = reverse_lazy('product_list')
 
@@ -29,6 +31,7 @@ class ProductDeleteView(DeleteView):
 class CategoryListView(ListView):
     model = Category
     template_name = 'category.html'
+    paginate_by = PAGINATION_LIMIT
 
 class CategoryCreateView(CreateView):
     model = Category
@@ -52,6 +55,7 @@ class CategoryDeleteView(DeleteView):
 class SubCategoryListView(ListView):
     model = SubCategory
     template_name = 'subcategory.html'
+    paginate_by = PAGINATION_LIMIT
 
 class SubCategoryCreateView(CreateView):
     model = SubCategory

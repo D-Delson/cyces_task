@@ -26,6 +26,8 @@
             {% endfor %}
         </tbody>
     </table>
+    {% include 'paginator.html' %}
+    
 
     <a href="{% url 'category_add' %} " class="btn btn-primary" role="button" >Add Category</a>
     <a href="{% url 'product_add' %} " class="btn btn-secondary" role="button" >Back to Product Add</a>

@@ -5,6 +5,7 @@
 <table class="table table-hove table-bordered">
     <thead>
         <tr>
+            <td>S. No</td>
             <td>Subcategory name</td>
             <td>Edit</td>
         </tr>
@@ -12,7 +13,8 @@
     <tbody>
         {% for object in object_list %}
         <tr>
-            <td>{{object.name}}</td>
+            <td>{{ object.id }}</td>
+            <td>{{ object.name }}</td>
             <td>
                 <div class="btn-group">
                     <a href="{% url 'subcategory_update' object.id %}" class="btn btn-secondary">Update</a>
@@ -24,6 +26,8 @@
         {% endfor %}
     </tbody>
 </table>
+{% include 'paginator.html' %}
+
 <div class="text-center">
     <a href="{% url 'subcategory_add' %}" class="btn btn-primary">Add Subcategory</a>
     <a href="{% url 'category_add' %}" class="btn btn-secondary">Back to Category Add</a>

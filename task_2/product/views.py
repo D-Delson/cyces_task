@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from django.db.models import Q
 from django.urls import reverse_lazy
+
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from .models import Product,Category, SubCategory 
 from .config import PAGINATION_LIMIT
 
@@ -8,6 +10,24 @@ class ProductListView(ListView):
     model = Product
     template_name = 'product.html'
     paginate_by = PAGINATION_LIMIT
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        paginator = context['paginator']
+        page = context['page_obj']
+        context['current_page'] = page.number
+        return context
+
+class ProductSearchListView(ListView):
+    model = Product
+    template_name = "search_html/product_search_results.html"
+
+    def get_queryset(self):  
+        query = self.request.GET.get('q')
+        if query:
+            return Product.objects.filter(name__icontains=query)
+        else:
+            return Product.objects.all()
 
 class ProductCreateView(CreateView):
     model = Product
@@ -33,6 +53,17 @@ class CategoryListView(ListView):
     template_name = 'category.html'
     paginate_by = PAGINATION_LIMIT
 
+class CategorySearchListView(ListView):
+    model = Category
+    template_name = "search_html/category_search_results.html"
+
+    def get_queryset(self):  
+        query = self.request.GET.get('q')
+        if query:
+            return Category.objects.filter(name__icontains=query)
+        else:
+            return Category.objects.all()
+
 class CategoryCreateView(CreateView):
     model = Category
     fields = ['name', 'subcategory']
@@ -56,6 +87,17 @@ class SubCategoryListView(ListView):
     model = SubCategory
     template_name = 'subcategory.html'
     paginate_by = PAGINATION_LIMIT
+
+class SubCategorySearchListView(ListView):
+    model = SubCategory
+    template_name = "search_html/subcategory_search_results.html"
+
+    def get_queryset(self):  
+        query = self.request.GET.get('q')
+        if query:
+            return SubCategory.objects.filter(name__icontains=query)
+        else:
+            return SubCategory.objects.all()
 
 class SubCategoryCreateView(CreateView):
     model = SubCategory

@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Subcategory</h1>
+<div class="text-center">
+    <h1>Subcategory</h1>
+    <form action="{% url 'subcategory_search_results' %}" method="get">
+    <input name="q" type="text" placeholder="Search...">
+</form>
+</div>
 <table class="table table-hove table-bordered">
     <thead>
         <tr>
@@ -11,17 +16,16 @@
         </tr>
     </thead>
     <tbody>
-        {% for object in object_list %}
+        {% for  object in object_list %}
         <tr>
-            <td>{{ object.id }}</td>
+            <td>{{forloop.counter}}</td>
             <td>{{ object.name }}</td>
             <td>
                 <div class="btn-group">
                     <a href="{% url 'subcategory_update' object.id %}" class="btn btn-secondary">Update</a>
                     <a href="{% url 'subcategory_delete' object.id %}" class="btn btn-danger">Delete</a>
                 </div>
-            </td>
-            
+            </td>   
         </tr>
         {% endfor %}
     </tbody>

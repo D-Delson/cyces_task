@@ -3,14 +3,13 @@
 {% block content %}
 <div class="text-center">
     <h1>Category</h1>
-    <form action="{% url 'category_search_results' %}" method="get">
+    <form action="{% url 'subcategory_search_results' %}" method="get">
         <input name="q" type="text" placeholder="Search...">
     </form>
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
                 <td>S. no</td>
-                <td>category_name</td>
                 <td>subcategory</td>
                 <td>Edit</td>
             </tr>
@@ -20,7 +19,6 @@
             <tr>
                 <td>{{forloop.counter}}</td>
                 <td>{{ object.name }}</td>
-                <td>{{ object.subcategory }}</td>
                 <td>
                     <div class="btn-group">
                         <a href="{% url 'category_update' object.id %}" class="btn btn-secondary">Update</a>
@@ -31,6 +29,10 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
+    <div class="text-center">
+        <a href="{% url 'subcategory_list' %}" class="btn btn-primary mb-5">Back To Home</a>
+    </div>
     {% include 'paginator.html' %}
     
 

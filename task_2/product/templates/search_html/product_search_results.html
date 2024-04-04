@@ -4,9 +4,6 @@
 
     <div class="container mt-3 text-center">
         <h3>Products</h3>
-        <form action="{% url 'search_results' %}" method="get">
-            <input name="q" type="text" placeholder="Search...">
-        </form>
     </div>
     
     <table class="table table-hover table-bordered">
@@ -25,7 +22,7 @@
         <tr>
             <td>{{ forloop.counter  }}</td>
             <td>{{ product.name }}</td>
-            <td>{{ product.price  }}</td>
+            <td>{{ product.price }}</td>
             <td>{{ product.category }}</td>
             <td>{{ product.subcategory }}</td>
             <td>
@@ -38,8 +35,11 @@
         {% endfor %}
     </tbody>   
     </table>
-    {% include 'paginator.html' %}
 
+    {% include 'paginator.html' %}
+    <div class="text-center">
+        <a href="{% url 'product_list' %}" class="btn btn-primary mb-5">Back To Home</a>
+    </div>
     <div class="text-center">
         <a class="btn btn-primary mt-5" href="{% url 'product_add' %}" role="button">Add Products</a>
         <a class="btn btn-secondary mt-5" href="{% url 'category_add' %}" role="button">Add Category</a>

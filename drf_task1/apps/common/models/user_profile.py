@@ -1,5 +1,8 @@
 from django.core.validators import EmailValidator, RegexValidator
 from django.db import models
+from rest_framework import filters
+
+from phonenumber_field.modelfields import PhoneNumberField
 
 from . import Base
 from . import name_validator
@@ -21,16 +24,9 @@ class UserProfile(Base):
 
     email = models.EmailField(
         'Email',
-        unique = True,
-        validators = [EmailValidator()]
     )
 
-    phone_number = models.CharField(
-        'phone number',
-        max_length = MAX_LENGTH,
-        unique = True,
-        validators = [RegexValidator(regex='^(\d){10}$', message='only numbers 0-9')]
-    )
+    phone_number = PhoneNumberField()
 
     country = models.ForeignKey(
         'Country',

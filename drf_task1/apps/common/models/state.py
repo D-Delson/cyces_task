@@ -8,13 +8,13 @@ class State(Base):
     name = models.CharField(
         'state name',
         max_length = MAX_LENGTH,
-        unique = True,
         validators = [name_validator],
     )
 
     country = models.ForeignKey(
         'Country',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name = 'states'
     )
 
     def __str__(self):

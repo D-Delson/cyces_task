@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     #3rd party
     'rest_framework',
+    'phonenumber_field',
     #local
     'apps.common',
     'apps.web',
@@ -131,3 +132,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
+}

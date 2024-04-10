@@ -125,3 +125,125 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# In a Python script or Django management command
+from django.db import connection
+from django.db.utils import ProgrammingError
+
+def drop_all_tables():
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            DROP TABLE IF EXISTS common_user, common_city, common_country, common_state;
+        ''')
+
+try:
+    drop_all_tables()
+    print("All tables dropped successfully.")
+except ProgrammingError as e:
+    print("Error occurred while dropping tables:", e)
+
+from django.db import models
+from .config import MAX_LENGTH
+
+
+class Base(models.Model):
+    created_at = models.DateTimeField(auto_now = True)
+    updated_at = models.DateTimeField(auto_now_add = True)
+    is_active = models.BooleanField(default = True)
+
+    class Meta:
+        abstract = True
+
+class UserProfile(Base):
+    name = models.CharField(
+        'first name',
+        max_length = MAX_LENGTH,
+    )
+
+    last_name = models.CharField(
+        'last name',
+        max_length = MAX_LENGTH,
+    )
+
+    email = models.EmailField(
+        'Email',
+        unique = True
+    )
+
+    phone_number = models.CharField(
+        'phone number',
+        max_length = MAX_LENGTH,
+        unique = True,
+    )
+
+    country = models.ForeignKey(
+        'Country',
+        on_delete = models.CASCADE
+    )
+
+    state = models.ForeignKey(
+        'State',
+        on_delete = models.CASCADE,
+    )
+
+    city = models.ForeignKey(
+        'City',
+        on_delete = models.CASCADE
+    )
+
+    is_admin = False
+
+    def __str__(self):
+        return self.name
+
+class Country(Base):
+    name = models.CharField(
+        'country name',
+        max_length = MAX_LENGTH,
+        unique = True
+    )
+
+    def __str__(self):
+        return self.name
+
+class State(Base):
+    name = models.CharField(
+        'state name',
+        max_length = MAX_LENGTH,
+        unique = True
+    )
+
+    country = models.ForeignKey(
+        'Country',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.name
+
+class City(Base):
+    name = models.CharField(
+        'city name',
+        max_length = MAX_LENGTH,
+        unique = True
+    )
+
+    state = models.ForeignKey(
+        'State',
+        on_delete=models.CASCADE
+    )
+
+    country = models.ForeignKey(
+        'Country',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.name
+
+
+
+
+

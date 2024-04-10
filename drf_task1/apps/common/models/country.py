@@ -8,7 +8,6 @@ class Country(Base):
     name = models.CharField(
         'country name',
         max_length = MAX_LENGTH,
-        unique = True,
         validators = [name_validator],
     )
 

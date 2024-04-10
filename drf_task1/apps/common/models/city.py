@@ -8,7 +8,6 @@ class City(Base):
     name = models.CharField(
         'city name',
         max_length = MAX_LENGTH,
-        unique = True,
         validators = [name_validator]
     )
 
@@ -19,7 +18,7 @@ class City(Base):
 
     country = models.ForeignKey(
         'Country',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
 
     def __str__(self):

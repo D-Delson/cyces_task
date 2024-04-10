@@ -8,4 +8,4 @@ class StateView(viewsets.ModelViewSet):
     queryset = State.objects.all()
     serializer_class = StateSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name']
+    search_fields = ['name', 'country__name']

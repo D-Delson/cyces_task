@@ -8,7 +8,8 @@ class City(Base):
     name = models.CharField(
         'city name',
         max_length = MAX_LENGTH,
-        validators = [name_validator]
+        validators = [name_validator],
+        unique=True
     )
 
     state = models.ForeignKey(

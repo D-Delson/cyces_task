@@ -9,6 +9,7 @@ class State(Base):
         'state name',
         max_length = MAX_LENGTH,
         validators = [name_validator],
+        unique=True
     )
 
     country = models.ForeignKey(

@@ -9,6 +9,7 @@ class Country(Base):
         'country name',
         max_length = MAX_LENGTH,
         validators = [name_validator],
+        unique=True
     )
 
     def __str__(self):

@@ -3,7 +3,11 @@ from . import CountrySerializer
 from ..models import State
 
 class StateSerializer(serializers.ModelSerializer):
-    country = CountrySerializer()
+    country = serializers.SerializerMethodField()
     class Meta:
         model = State
-        fields = ['name', 'country']
+        fields = ['id', 'name', 'country']
+
+    def get_country(self, obj):
+        country = obj.country.name
+        return country

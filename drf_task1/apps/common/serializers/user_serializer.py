@@ -7,9 +7,6 @@ from ..models import UserProfile
 from . import CountrySerializer, StateSerializer, CitySerializer
 
 class UserSerializer(serializers.ModelSerializer):
-    city = CitySerializer()
-    state = StateSerializer()
-    country = CountrySerializer()
 
     class Meta:
         model = UserProfile

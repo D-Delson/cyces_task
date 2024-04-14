@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 
 class AppManager(models.Manager):
     def get_queryset(self):
@@ -21,6 +22,7 @@ class Base(models.Model):
 
 def name_validator(value):
     return RegexValidator(regex='^[A-Za-z\s]*$', message='only a-z')(value)
+
 
          
 

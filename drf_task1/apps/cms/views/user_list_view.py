@@ -1,14 +1,19 @@
 import csv
-from django.http import HttpResponse
+import os
+import pytz
+from datetime import datetime
+from django.http import JsonResponse
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
+from django.views.generic import View
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, filters
 from rest_framework.permissions import IsAdminUser
-from rest_framework.generics import ListAPIView
-from apps.common.models import UserProfile
+
+from config import settings
+from apps.common.models import UserProfile, City, State, Country
 from apps.common.serializers import UserListSerializer
 from ..pagination import CustomPagination
 
@@ -22,51 +27,28 @@ class UserListView(mixins.ListModelMixin, viewsets.GenericViewSet):
                      'country__name', 'phone_number', 'email']
 
 
-class UserCSVExport(ListAPIView):
+class UserCSVExport(View):
     queryset = UserProfile.objects.all()
     serializer_class = UserListSerializer
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="yourmodel_data.csv"'
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        print(serializer)
 
-        writer = csv.writer(response)
-        writer.writerow(serializer.data[0].keys())  
-        for item in serializer.data:
-            writer.writerow(item.values())
+        csv_data = [serializer.data[0].keys()]  
+        csv_data += [item.values() for item in serializer.data]
 
-        return response
+        model_name = self.serializer_class.Meta.model.__name__.lower()
+        current_datetime = datetime.now(pytz.timezone('UTC')).strftime("%Y-%m-%d_%H-%M-%S")
+        filename = f"{model_name}_data_{current_datetime}.csv"
+
+        file_path = os.path.join(settings.BASE_DIR, filename)
+        with open(file_path, 'w', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerows(csv_data)
+        response_data = {
+            'filename': filename
+        }
+        return JsonResponse(response_data)
     
-    # #import csv file data
-    # @action(detail=False, methods=['POST'])
-    # def upload_data(self, request):
-    #     file = request.FILES["file"]
-    #     content = file.read()
-    #     file_content = ContentFile(content)
-    #     file_name = fs.save("_tem.csv", file_content)
-    #     tmp_file = fs.path(file_name)
-    #     csv_file = open(tmp_file, errors='ignore')
-    #     reader = csv.reader(csv_file)
-    #     next(reader)
-
-    #     user_list = []
-    #     for id, row in enumerate(reader):
-    #         (name, last_name, email, phone_number, city_id, state_id, country_id) = row  
-    #         user_list.append((name,
-    #                           last_name,
-    #                           email,
-    #                           phone_number,
-    #                           city_id,
-    #                           state_id, 
-    #                           country_id))
-    #     UserProfile.objects.bulk_create([UserProfile( name = name,   
-    #                                                   last_name = last_name,
-    #                                                   email = email,
-    #                                                   phone_number = phone_number,
-    #                                                   city_id = city_id,                    
-    #                                                   state_id = state_id,               
-    #                                                   country_id = country_id)            
-    #                                      for name, state_id, country_id in city_list])
-    #     return Response("Successfully uploaded the data!")

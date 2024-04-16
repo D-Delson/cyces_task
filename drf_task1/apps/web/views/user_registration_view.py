@@ -4,17 +4,13 @@ from rest_framework import viewsets
 
 from apps.common.models import UserProfile
 from apps.common.serializers import UserSerializer 
-from config import settings
+from apps.cms.views.response_utiles import handle_response
 
 class UserRegistration(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
-                    
-    def perform_create(self, serializer):
-        instance = serializer.save()
-        subject = 'Welcome to our website'
-        message = f'Hello {instance.name}'
-        from_email = settings.EMAIL_HOST_USER
-        recipient_list = [instance.email]
 
-        send_mail(subject, message, from_email, recipient_list)
+    @handle_response
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+

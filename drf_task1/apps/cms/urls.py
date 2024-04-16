@@ -10,11 +10,13 @@ router.register(r'country', CountryView)
 router.register(r'state', StateView)
 router.register(r'city', CityView)
 
+EXPORT_PATH = 'export/csv'
+
 urlpatterns = [
-    path('user_list/export/csv', UserCSVExport.as_view(), name='user_csv_export'),
-    path('country/export/csv', CountryCSVExport.as_view(), name='country_csv_export'),
-    path('state/export/csv', StateCSVExport.as_view(), name='state_csv_export'),
-    path('city/export/csv', CityCSVExport.as_view(), name='city_csv_export')
+    path(f'user_list/{EXPORT_PATH}', UserCSVExport.as_view(), name='user_csv_export'),
+    path(f'country/{EXPORT_PATH}', CountryCSVExport.as_view(), name='country_csv_export'),
+    path(f'state/{EXPORT_PATH}', StateCSVExport.as_view(), name='state_csv_export'),
+    path(f'city/{EXPORT_PATH}', CityCSVExport.as_view(), name='city_csv_export')
 ]
 urlpatterns = router.urls + urlpatterns
 

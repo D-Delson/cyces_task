@@ -1,16 +1,20 @@
 import csv
+import os
+import pytz
 
-from django.http import HttpResponse
+from datetime import datetime
+from django.http import JsonResponse
+from django.views.generic import View
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, filters
-from rest_framework.generics import ListAPIView
 
-from apps.common.models import City
+from apps.common.models import City, State, Country
 from apps.common.serializers import CitySerializer, CityCreateSerializer
+from config import settings
 from ..pagination import CustomPagination
 from  .response_utiles import handle_response
 
@@ -43,34 +47,53 @@ class CityView(viewsets.ModelViewSet):
         file_content = ContentFile(content)
         file_name = fs.save("_tem.csv", file_content)
         tmp_file = fs.path(file_name)
-        csv_file = open(tmp_file, errors='ignore')
-        reader = csv.reader(csv_file)
-        next(reader)
 
-        city_list = []
-        for id, row in enumerate(reader):
-            (name, state_id, country_id) = row  
-            city_list.append((name,state_id, country_id))
-        City.objects.bulk_create([City( name = name,                       \
-                                         state_id = state_id,               \
-                                         country_id = country_id)            \
-                                         for name, state_id, country_id in city_list])
+        with open(tmp_file, errors='ignore') as csv_file:
+            reader = csv.reader(csv_file)
+            next(reader)
+
+            for id, row in enumerate(reader):
+                name = row[0].strip().lower()
+                state_name = row[1].strip().lower()
+                country_name = row[2].strip().lower()
+
+                state = State.objects.get(name=state_name)
+                country = Country.objects.get(name=country_name)
+
+                city, _ = City.objects.update_or_create(
+                    name__iexact = name,
+                    state = state,
+                    country = country,
+                    defaults = {
+                        "name" : name
+                    }
+                )
         return Response("Successfully uploaded the data!")
 
-class CityCSVExport(ListAPIView):
+   
+
+class CityCSVExport(View):
     queryset = City.objects.all()
     serializer_class = CitySerializer
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="yourmodel_data.csv"'
+        queryset = self.queryset
+        serializer = self.serializer_class(queryset, many=True)
+        print(serializer)
 
-        writer = csv.writer(response)
-        writer.writerow(serializer.data[0].keys())  
-        for item in serializer.data:
-            writer.writerow(item.values())
+        csv_data = [serializer.data[0].keys()]  
+        csv_data += [item.values() for item in serializer.data]
 
-        return response
+        model_name = self.serializer_class.Meta.model.__name__.lower()
+        current_datetime = datetime.now(pytz.timezone('UTC')).strftime("%Y-%m-%d_%H-%M-%S")
+        filename = f"{model_name}_data_{current_datetime}.csv"
+
+        file_path = os.path.join(settings.BASE_DIR, filename)
+        with open(file_path, 'w', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerows(csv_data)
+        response_data = {
+            'filename': filename
+        }
+        return JsonResponse(response_data)
 

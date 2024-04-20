@@ -8,7 +8,7 @@ from apps.cms.models import State, Country, Degree, Skill, Industry
 from apps.web.models import Education, Certification,WorkDetail, EmploymentHistory, Award, \
                             Preference
 
-class UserRegistrationView(generics.ListCreateAPIView):
+class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializers
     

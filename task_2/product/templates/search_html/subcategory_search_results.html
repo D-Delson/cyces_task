@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Category</h1>
+    <form action="{% url 'subcategory_search_results' %}" method="get">
+        <input name="q" type="text" placeholder="Search...">
+    </form>
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <td>S. no</td>
+                <td>subcategory</td>
+                <td>Edit</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{ object.name }}</td>
+                <td>
+                    <div class="btn-group">
+                        <a href="{% url 'category_update' object.id %}" class="btn btn-secondary">Update</a>
+                        <a href="{% url 'category_delete' object.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <div class="text-center">
+        <a href="{% url 'subcategory_list' %}" class="btn btn-primary mb-5">Back To Home</a>
+    </div>
+    {% include 'paginator.html' %}
+    
+
+    <a href="{% url 'category_add' %} " class="btn btn-primary" role="button" >Add Category</a>
+    <a href="{% url 'product_add' %} " class="btn btn-secondary" role="button" >Back to Product Add</a>
+
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+
+    <div class="container mt-3 text-center">
+        <h3>Products</h3>
+        <form action="{% url 'search_results' %}" method="get">
+            <input name="q" type="text" placeholder="Search...">
+        </form>
+    </div>
+    
+    <table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <td>S. No</td>
+            <td>Product name</td>
+            <td>Price</td>
+            <td>Category</td>
+            <td>SubCategory</td>
+            <td>Edit</td>
+        </tr>
+    </thead> 
+    <tbody>
+        {% for product in object_list %}
+        <tr>
+            <td>{{ forloop.counter  }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price  }}</td>
+            <td>{{ product.category }}</td>
+            <td>{{ product.subcategory }}</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-outline-danger" href="{% url 'product_update' product.pk %}" >Update</a>
+                    <a class="btn btn-outline-danger" href="{% url 'product_delete' product.pk %}">Delete</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>   
+    </table>
+    {% include 'paginator.html' %}
+
+    <div class="text-center">
+        <a class="btn btn-primary mt-5" href="{% url 'product_add' %}" role="button">Add Products</a>
+        <a class="btn btn-secondary mt-5" href="{% url 'category_add' %}" role="button">Add Category</a>
+    </div>
+    {% endblock %}
+
+
+
+
+
+ 

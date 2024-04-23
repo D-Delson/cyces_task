@@ -1,0 +1,21 @@
+from rest_framework import viewsets, filters
+from rest_framework.permissions import IsAdminUser
+
+from apps.common.models import User
+from apps.cms.serializers import CombinedSerializer
+from apps.web.serializers import UserSerializers
+
+class CMSViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = [IsAdminUser]
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        'name',
+        'phone_number',
+        'work_detail__skill__skill_name',
+    ]
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return UserSerializers
+        return CombinedSerializer

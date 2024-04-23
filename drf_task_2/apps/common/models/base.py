@@ -1,6 +1,10 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
+class AppManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True)
+
 class Base(models.Model):
     create_at = models.DateTimeField(
         'created',
@@ -15,6 +19,12 @@ class Base(models.Model):
     is_active = models.BooleanField(
         default = True
     )
+
+    objects = AppManager()
+
+    def delete(self, *args, **kwargs):
+        self.is_active = False
+        self.save()
 
     class Meta:
         abstract = True

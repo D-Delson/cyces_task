@@ -5,4 +5,7 @@ from apps.web.models import Award
 class AwardSerializers(ModelSerializer):
     class Meta:
         model = Award
-        fields = '__all__'
+        fields = [
+            'id',
+            'award_name',
+            'organisation']

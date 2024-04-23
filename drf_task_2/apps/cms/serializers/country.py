@@ -5,4 +5,5 @@ from apps.cms.models import Country
 class CountrySerializers(ModelSerializer):
     class Meta:
         model = Country
-        fields = '__all__'
+        fields = ['id',
+                  'country_name']

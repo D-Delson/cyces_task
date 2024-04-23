@@ -5,4 +5,11 @@ from apps.web.models import Preference
 class PreferenceSerializers(ModelSerializer):
     class Meta:
         model = Preference
-        fields = '__all__'
+        fields = [
+            'id',
+            'country',
+            'industries',
+            'position',
+            'available_from',
+            'salary_expectation'
+        ]

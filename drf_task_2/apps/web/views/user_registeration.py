@@ -1,5 +1,6 @@
 from rest_framework import mixins, generics
 from rest_framework.response import Response
+from rest_framework import viewsets
 
 from ..serializers import UserSerializers
 #import models
@@ -15,7 +16,6 @@ class UserRegistrationView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         data = request.data
 
-        #adding foreign key
         #adding state
         state_name = data["state"]["state_name"]
         state, _ = State.objects.update_or_create(state_name=state_name)
@@ -24,16 +24,17 @@ class UserRegistrationView(generics.CreateAPIView):
         country_name = data["country"]["country_name"]
         country, _ = Country.objects.update_or_create(country_name=country_name)
 
-        user = User.objects.create(name=data["name"],
-                                       last_name=data["last_name"],
-                                       phone_number=data["phone_number"],
-                                       email=data["email"],
-                                       address=data["address"],
-                                       city=data["city"],
-                                       pincode=data["pincode"],
-                                       state=state,
-                                       country=country,
-                                       )
+        user = User.objects.create(
+            name=data["name"],
+            last_name=data["last_name"],
+            phone_number=data["phone_number"],
+            email=data["email"],
+            address=data["address"],
+            city=data["city"],
+            pincode=data["pincode"],
+            state=state,
+            country=country,
+        )
         user.save()
 
         #adding Many to Many Fields

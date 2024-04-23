@@ -1,13 +1,13 @@
 from rest_framework.serializers import ModelSerializer
 
-from apps.web.models import WorkDetail, EmploymentHistory
+from apps.web.models import WorkDetail
 
 class WorkDetailSerializer(ModelSerializer):
+
     class Meta:
         model = WorkDetail
-        fields = '__all__'
+        fields = [
+            'skill',
+            'total_year_of_experiance'
+        ]
 
-class EmploymentHistory(ModelSerializer):
-    class Meta:
-        model = EmploymentHistory
-        fields = '__all__'

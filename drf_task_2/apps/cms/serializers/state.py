@@ -5,4 +5,4 @@ from apps.cms.models import State
 class StateSerializers(ModelSerializer):
     class Meta:
         model = State
-        fields = '__all__'
+        fields = ['id', 'state_name']

@@ -5,4 +5,5 @@ from apps.cms.models import Degree
 class DegreeSerializers(ModelSerializer):
     class Meta:
         model = Degree
-        fields = '__all__'
+        fields = ['id',
+                  'degree_name']

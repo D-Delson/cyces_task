@@ -5,4 +5,5 @@ from apps.cms.models import Industry
 class Industryserializers(ModelSerializer):
     class Meta:
         model = Industry
-        fields = '__all__'
+        fields = ['id',
+                  'industry_name']

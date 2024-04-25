@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.cms.models import JobPost
-from apps.cms.serializers import DashBoardSerializer
 from apps.common.models import User
 
 class DashBoardAPIView(APIView):
@@ -15,6 +14,4 @@ class DashBoardAPIView(APIView):
             'total_job_posts': total_job_posts,
             'total_applications': total_applications,
         }
-
-        serializer = DashBoardSerializer(counts)
-        return Response(serializer.data)
+        return Response(counts)

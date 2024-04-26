@@ -1,8 +1,12 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 from apps.cms.models import JobPost
 
-class JobPostSerializer(ModelSerializer):
+
+class JobPostReadSerializer(ModelSerializer):
+    skill = serializers.StringRelatedField(many=True)
+    industry = serializers.SerializerMethodField()
     class Meta:
         model = JobPost
         fields = [
@@ -11,6 +15,17 @@ class JobPostSerializer(ModelSerializer):
             'skill',
             'industry',
             'vacancies',
-            'posted_on',
+            'posted_on'
         ]
-        depth = 1
+    def get_industry(self, obj):
+        return obj.industry.industry_name
+
+class JobPostWriteSerializer(ModelSerializer):
+    class Meta:
+        model = JobPost
+        fields = [
+            'job_name',
+            'skill',
+            'industry',
+            'vacancies',
+        ]

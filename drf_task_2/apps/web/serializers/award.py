@@ -8,4 +8,5 @@ class AwardSerializers(ModelSerializer):
         fields = [
             'id',
             'award_name',
-            'organisation']
+            'organisation'
+            ]

@@ -9,4 +9,7 @@ class Degree(Base):
         max_length = MAX_LENGTH
     )
 
+    def __str__(self):
+        return self.degree_name
+
 

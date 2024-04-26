@@ -22,14 +22,14 @@ WORKING_EXP = [
 class WorkDetail(Base):
 
 
-    skill = models.ForeignKey(
-        Skill,
-        on_delete = models.CASCADE
+    skill = models.ManyToManyField(
+        Skill
     )
 
     total_year_of_experiance = models.IntegerField(
         choices = WORKING_EXP
     )
+
 
 
 class EmploymentHistory(Base):

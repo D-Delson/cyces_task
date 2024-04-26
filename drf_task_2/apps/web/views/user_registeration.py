@@ -1,17 +1,11 @@
 from rest_framework import mixins, generics
-from rest_framework.response import Response
-from rest_framework import viewsets
 
-from ..serializers import UserSerializers
-#import models
+from ..serializers import UserWriteSerializers
 from apps.common.models import User
-from apps.cms.models import State, Country, Degree, Skill, Industry
-# from apps.web.models import Education, Certification,WorkDetail, EmploymentHistory, Award, \
-#                             Preference
 
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializers
+    serializer_class = UserWriteSerializers
     
     # def create(self, request, *args, **kwargs):
     #     data = request.data

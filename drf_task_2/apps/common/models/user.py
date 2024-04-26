@@ -2,8 +2,15 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.cms.models import State, Country
-from apps.web.models import Education, Certification, Award, Preference, WorkDetail, \
-                            EmploymentHistory
+from apps.web.models import (
+    Education,
+    Certification,
+    Award,
+    Preference,
+    WorkDetail,
+    EmploymentHistory
+)
+
 from . import Base
 from . import validate_name, validate_pincode
 from .. import MAX_LENGTH
@@ -28,6 +35,7 @@ class User(Base):
 
     email = models.EmailField(
         'Email',
+        unique=True
     )
 
     address = models.TextField(

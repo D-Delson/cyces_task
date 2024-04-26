@@ -1,36 +1,79 @@
-from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 
 from apps.common.models import User
-from apps.cms.models import Country,Degree,Industry,Skill, State 
-from apps.cms.serializers import StateSerializers
+from apps.cms.models import Country, State 
 
-from apps.web.models import Award
-from apps.web.models import Certification
-from apps.web.models import Education
-from apps.web.models import Preference
-from apps.web.models import WorkDetail
-from apps.web.models import EmploymentHistory 
+from apps.web.models import (
+    Award,
+    Certification, 
+    Education,
+    Preference,
+    WorkDetail,
+    EmploymentHistory
+)
 
 from .award  import AwardSerializers                        
 from apps.web.serializers import CertificationSerializers
-from apps.web.serializers import EducationSerializers
+from apps.web.serializers import (
+    EducationReadSerializers,
+    EducationWriteSerializers
+)
+from .employment_history import (
+    EmploymentHistoryReadSerializer,
+    EmploymentHistoryWriteSerializer
+)
+from .preference import (
+    PreferenceSerializers,
+    PreferenceReadSerializer)
+from .work_detail import (
+    WorkDetailReadSerializer,
+    WorkDetailWriteSerializer
+)
 
-from .employment_history import EmploymentHistorySerializer
-from .preference import PreferenceSerializers
-from .work_detail import WorkDetailSerializer
-                       
-                                 
+
+class UserReadSerializer(serializers.ModelSerializer):
+    state = serializers.SerializerMethodField()
+    country = serializers.SerializerMethodField()
+    education = EducationReadSerializers(many=True)
+    certification = serializers.StringRelatedField(many=True)
+    work_detail = WorkDetailReadSerializer(many=True)
+    employment_history = EmploymentHistoryReadSerializer(many=True)
+    awards = serializers.StringRelatedField(many=True)
+    preference = PreferenceReadSerializer(many=True)
+
+    def get_state(self, obj):
+            return obj.state.state_name
+        
+    def get_country(self, obj):
+        return obj.country.country_name
+    class Meta:
+        model = User
+        fields = [
+            'name',
+            'last_name',
+            'phone_number',
+            'email',
+            'address',
+            'city',
+            'pincode',
+            'state',
+            'country',
+            'education',
+            'certification',
+            'work_detail',
+            'employment_history',
+            'awards',
+            'preference',
+        ]
+
+        
+                                                      
                                 
-class UserSerializers(ModelSerializer):
-    
-    state = serializers.PrimaryKeyRelatedField(queryset=State.objects.all(), source='state_id')
-    country  = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), source='country_id')
-
-    education = EducationSerializers(many=True)
+class UserWriteSerializers(serializers.ModelSerializer):
+    education = EducationWriteSerializers(many=True)
     certification = CertificationSerializers(many=True)
-    work_detail = WorkDetailSerializer(many=True)
-    employment_history = EmploymentHistorySerializer(many=True)
+    work_detail = WorkDetailWriteSerializer(many=True)
+    employment_history = EmploymentHistoryWriteSerializer(many=True)
     awards = AwardSerializers(many=True)
     preference = PreferenceSerializers(many=True)
 
@@ -54,13 +97,11 @@ class UserSerializers(ModelSerializer):
             'awards',
             'preference',
         ]
-        depth = 2
-        unique_together = [('email', 'phone_number')]
     
     def create(self, validate_data):
 
-        state_id = validate_data.pop('state_id').id
-        country_id = validate_data.pop('country_id').id
+        state_id = validate_data.pop('state').id
+        country_id = validate_data.pop('country').id
         state = State.objects.get(id=state_id)
         country = Country.objects.get(id=country_id)
         
@@ -76,9 +117,7 @@ class UserSerializers(ModelSerializer):
         user.save()
 
         for education in education_data:
-            degree_name = education["degree"]["degree_name"]
-            degree_id, _ = Degree.objects.update_or_create(degree_name = degree_name)
-
+            degree_id = education["degree"]
             edu, _ = Education.objects.update_or_create(
                 year_of_passing=education["year_of_passing"],
                 school=education["school"],
@@ -87,19 +126,17 @@ class UserSerializers(ModelSerializer):
             user.education.add(edu)
         
         for certificate in certification_data:
-            cer, _ = Certification.objects.get_or_create(
+            cer, _ = Certification.objects.update_or_create(
                 certification_name = certificate["certification_name"],
                 certification_year = certificate["certification_year"]
             )
             user.certification.add(cer)
 
         for work in work_detail_data:
-
-            work_data, _ = WorkDetail.objects.get_or_create(
-                skill = work['skill'], 
+            work_data, _ = WorkDetail.objects.update_or_create(
                 total_year_of_experiance = work["total_year_of_experiance"]
             )
-
+            work_data.skill.add(*work['skill'])
             user.work_detail.add(work_data)
 
         for history in employment_history_data:
@@ -120,11 +157,8 @@ class UserSerializers(ModelSerializer):
             user.awards.add(new_award)
 
         for preference in preference_data:
-            country_name = preference["country"].id
-            country_id, _ = Country.objects.update_or_create(country_name=country_name)
-
-            industry_name = preference["industries"].id
-            industry_id, _ = Industry.objects.update_or_create(industry_name=industry_name)
+            country_id = preference["country"]
+            industry_id = preference["industries"]
 
             new_preference, _ = Preference.objects.update_or_create(
                 country = country_id,

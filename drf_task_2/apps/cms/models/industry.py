@@ -10,7 +10,7 @@ class Industry(Base):
         validators = [validate_name]
     )
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.industry_name
     
     

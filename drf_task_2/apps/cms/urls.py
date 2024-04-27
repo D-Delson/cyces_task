@@ -7,12 +7,12 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (
-    ApplicationView,
     ChangePasswordAPIView,
     CountryViewSet,
     CMSViewSet,
     DashBoardAPIView,
     DegreeViewSet,
+    UserReadView,
     IndustryViewSet,
     JobPostViewSet,
     StateModelViewSet,
@@ -32,6 +32,6 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('dashboard/', DashBoardAPIView.as_view(), name='dashboard-view'),
-    path('change-password/', ChangePasswordAPIView.as_view(), name='password change' ),
-    path('users/<int:pk>/', ApplicationView.as_view(), name='application_view')
+    path('change-password/', ChangePasswordAPIView.as_view(), name='password change'),
+    path('users/view/<int:pk>/', UserReadView.as_view(), name='user-eye-view')
 ] + router.urls 

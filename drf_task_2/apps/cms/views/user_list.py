@@ -26,5 +26,5 @@ class CMSViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         user_id = kwargs['pk']
-        file_path = process_retrieve_action.delay(user_id).get()
+        file_path = process_retrieve_action(user_id)#.delay(user_id).get()
         return Response({'file_path': file_path}, status=status.HTTP_200_OK)

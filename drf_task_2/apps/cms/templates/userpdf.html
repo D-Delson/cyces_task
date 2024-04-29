@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        h1 {
+            color: blueviolet;
+            text-align: center;
+        }
+
+        #details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .detail {
+            flex: 1 0 25%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+
+        .detail div {
+            margin-bottom: 5px; 
+        }
+
+        .detail b {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ user.name }} {{user.last_name }} Data</h1>
+    <div id="details">
+        <div class="detail">
+            <h2>DETAILS</h2>
+            <div><b>PHONE</b> {{user.phone_number}}</div>
+            <div><b>EMAIL</b> {{user.email}}</div>
+            <div><b>ADDRESS</b> {{user.address}}</div>
+            <div><b>CITY</b> {{user.city}}</div>
+            <div><b>STATE</b> {{user.state}}</div>
+            <div><b>COUNTRY</b> {{user.country}}</div>
+        </div>  
+    </div>
+    <div id="preference">
+        <div class="preference">
+            <h2>PREFERENCE</h2>
+            {% for preference in user.preference %}
+            <div><b>Countries</b> {{ preference.country }}</div>
+            <div><b>Industry</b> {{preference.industries}}</div>
+            <div><b>Position</b> {{preference.position}}</div>
+            <div><b>Available From</b> {{preference.available_from}}</div>
+            <div><b>Salary Expectation</b> {{preference.salary_expectation}}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="education">
+        <div class="education">
+            <h2>Education</h2>
+            {% for education in user.education %}
+            <div><b>Degree</b> {{ education.degree }}</div>
+            <div><b>Year Of Passing </b> {{ education.year_of_passing }}</div>
+            <div><b>School </b> {{ education.school }}</div>
+            <p>----</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="certificate">
+        <div class="certificate">
+            <h2>Certificate</h2>
+            {% for certificate in user.certification %}
+            <div>{{ certificate}}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="awards">
+        <div class="awards">
+            <h2>Awards</h2>
+            {% for award in user.awards %}
+            <div>{{ award }}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="work_detail">
+        <div class="work_detail">
+            <h2>Skills</h2>
+            {% for work in user.work_detail %}
+            <div>{{work.skill}}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="work_detail">
+        <div class="work_detail">
+            <h2>Work Details</h2>
+            {% for work in user.employment_history %}
+            <div><b>Job Title </b>{{work.job_title}}</div>
+            <div><b>Employer Name </b>{{work.employer}}</div>
+            <div><b>City</b> {{work.city}}</div>
+            <div><b>State</b> {{work.state}}</div>
+            <div><b>Country</b> {{work.country}}</div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

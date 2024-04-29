@@ -6,7 +6,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-class ChangePasswordAPIView(APIView):
+from apps.common import ResponseUtils
+
+class ChangePasswordAPIView(ResponseUtils,
+                            APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):

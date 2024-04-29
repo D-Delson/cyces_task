@@ -2,8 +2,10 @@ from rest_framework import mixins, generics
 
 from ..serializers import UserWriteSerializers
 from apps.common.models import User
+from apps.common import ResponseUtils
 
-class UserRegistrationView(generics.CreateAPIView):
+class UserRegistrationView(ResponseUtils,
+                           generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserWriteSerializers
     

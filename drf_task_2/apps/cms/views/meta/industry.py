@@ -3,8 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 
 from apps.cms.models import Industry
 from apps.cms.serializers import Industryserializers
+from apps.common import ResponseUtils
 
-class IndustryViewSet(ModelViewSet):
+class IndustryViewSet(ResponseUtils,
+                      ModelViewSet):
     queryset = Industry.objects.all()
     serializer_class = Industryserializers
     permission_classes = [IsAuthenticated]

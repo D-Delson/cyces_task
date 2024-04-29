@@ -6,8 +6,10 @@ from apps.cms.serializers import (
     JobPostWriteSerializer,
     JobPostReadSerializer
 )
+from apps.common import ResponseUtils
 
-class JobPostViewSet(ModelViewSet):
+class JobPostViewSet(ResponseUtils,
+                     ModelViewSet):
     queryset = JobPost.objects.all()
     permission_classes = [IsAuthenticated]
 

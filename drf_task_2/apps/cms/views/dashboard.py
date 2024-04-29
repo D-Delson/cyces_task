@@ -4,8 +4,10 @@ from rest_framework.views import APIView
 
 from apps.cms.models import JobPost
 from apps.common.models import User
+from apps.common import ResponseUtils
 
-class DashBoardAPIView(APIView):
+class DashBoardAPIView(ResponseUtils,
+                       APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         total_job_posts = JobPost.objects.count()

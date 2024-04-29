@@ -2,14 +2,15 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
 from apps.cms.models import State
-
+from apps.common import ResponseUtils
 from apps.cms.serializers import (
     StateReadSerializer,
     StateWriteSerializer
 )
 
 
-class StateModelViewSet(ModelViewSet):
+class StateModelViewSet(ResponseUtils,
+                        ModelViewSet):
     queryset = State.objects.all()
     permission_classes = [IsAuthenticated]
 

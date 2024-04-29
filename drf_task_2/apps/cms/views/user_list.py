@@ -8,8 +8,10 @@ from apps.common.models import User
 from apps.cms.serializers import CombinedSerializer
 from apps.web.serializers import UserReadSerializer
 from apps.cms import process_retrieve_action 
+from apps.common import ResponseUtils
 
-class CMSViewSet(viewsets.ModelViewSet):
+class CMSViewSet(ResponseUtils,
+                 viewsets.ModelViewSet):
     queryset = User.objects.all()
     permission_classes = [IsAdminUser, IsAuthenticated]
     filter_backends = [filters.SearchFilter]

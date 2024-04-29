@@ -3,8 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 
 from apps.cms.models import Skill
 from apps.cms.serializers import Skillserializers
+from apps.common import ResponseUtils
 
-class SkillViewSet(ModelViewSet):
+class SkillViewSet(ResponseUtils,
+                   ModelViewSet):
     queryset = Skill.objects.all()
     serializer_class = Skillserializers
     permission_classes = [IsAuthenticated]
